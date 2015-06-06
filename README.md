@@ -53,21 +53,12 @@ your system!
 Linux/Unix and Windows require different scripts!
 
 For Linux the script must be located in your PATH, for example a private binary
-directory off your home directory.  It must be named "pmd.sh" and it contains
-the following:
-
-#!/bin/sh
-cd  /home/tedm/pmd-bin-5.3.2/bin
-./run.sh pmd -dir $1 -rulesets java-basic,java-design
+directory off your home directory.  It must be named "pmd.sh" there is an example
+in the distribution.
 
 For Windows, the preferred location for the script is in c:\windows.  (You can also put it
-anywhere else that is available to the PATH)  The script must be named "pmdsh.bat" and it
-must contain:
-
-@echo off
-java -classpath c:\pmd-bin-5.3.2\lib\* net.sourceforge.pmd.PMD -dir " %1 %2 %3 %4 %5 %6 %7 " -format text -R java-basic,java-design -version 1.7 -language java
-pause
-exit
+anywhere else that is available to the PATH)  The script must be named "pmdsh.bat" and
+there is an example in the distribution.
 
 Please see the PMD documentation for the rulesets available.
 
