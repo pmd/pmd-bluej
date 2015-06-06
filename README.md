@@ -65,7 +65,6 @@ Please see the PMD documentation for the rulesets available.
 Building:
 
 If you want to build it: (under Linux):
-(Note - this is very crude - I'm still learning!)
 
 Install Maven
 
@@ -82,6 +81,7 @@ mv target/pmd-bluej-1.0-SNAPSHOT.jar PMDExecExt.jar
 mvn clean
 
 To build the Windows version:
+(Note - I know this is a bit of a hack)
 
 Modify MenuBuilder.java to comment the Unixisms and uncomment the Windows
 stuff
