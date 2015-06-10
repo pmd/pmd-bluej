@@ -3,7 +3,7 @@
 This BlueJ extension was developed under Linux for both BlueJ for Linux and
 BlueJ for Windows use.
 
-Use:
+## Use:
 
 In BlueJ, open to the main class window that displays your classes, right-click
 on a class object, when the menu comes up, at the bottom of it you will see
@@ -11,7 +11,7 @@ PMD as an option, select that and click "check code"  A popup will then run
 PMD against your class source file and then display a popup listing all of
 the things PMD does not like about your code.
 
-Installation:
+## Installation:
 
 The prior version of this extension from 2001 included PMD, so to use it PMD
 did not have to be installed.  This version of this extension does not include PMD
@@ -22,14 +22,14 @@ Normal command line operation of PMD produces an
 HTML file loadable by web browser, a typical command invocation under Linux
 for PMD installed in your home directory might be:
 
-cd ~
-pmd-bin-5.3.2/bin/run.sh pmd -dir  ~/MyProject -f html -rulesets java-basic,java-design > MyProject_pmd_report.html
+    cd ~
+    pmd-bin-5.3.2/bin/run.sh pmd -dir  ~/MyProject -f html -rulesets java-basic,java-design > MyProject_pmd_report.html
 
 Under Windows it is usually most convenient to install PMD in the root so as to
 avoid spaces in directory names, (ie: Program Files) or PMD might not execute
 properly.  A typical command invocation under Windows for PMD might be:
 
-c:\pmd-bin-5.3.2\pmd -d c:\docume~1\tedm\mydocu~1\javaproj\myproj -f html -R java-unusedcode > myproj_report.html
+    c:\pmd-bin-5.3.2\pmd -d c:\docume~1\tedm\mydocu~1\javaproj\myproj -f html -R java-unusedcode > myproj_report.html
 
 You can install PMD from a prebuilt file or download it and build it yourself.
 
@@ -50,7 +50,7 @@ should you have multiple versions of PMD installed, as well as the version of Ja
 checking against.  It MUST be tailored to the PMD location, version, and options on
 your system!
 
-Linux/Unix and Windows require different scripts!
+**Linux/Unix and Windows require different scripts!**
 
 For Linux the script must be located in your PATH, for example a private binary
 directory off your home directory.  It must be named "pmd.sh" and there is an
@@ -63,34 +63,24 @@ there is an example in the distribution.
 
 Please see the PMD documentation for the rulesets available.
 
-Building:
+## Building:
 
-If you want to build it: (under Linux):
+### If you want to build it: (under Linux):
 
-Install Maven
+You need to have maven installed.
 
-Find the BlueJ extensions jar file, this file (under Linux) is located
-in ~\bluej\lib\ and (under Windows) it is located
-in C:\Program Files\BlueJ\lib and is named bluejext.jar.
+    mvn package
+    mv target/pmd-bluej-1.0-SNAPSHOT.jar PMDExecExt.jar
+    mvn clean
 
-copy bluejext.jar from your BlueJ lib directory to the lib directory
-
-mvn package
-
-mv target/pmd-bluej-1.0-SNAPSHOT.jar PMDExecExt.jar
-
-mvn clean
-
-To build the Windows version:
+### To build the Windows version:
 (I know this is a bit of a hack)
 
 Modify MenuBuilder.java to comment the Unixisms and uncomment the Windows
 stuff
 
-mvn package
-
-mv target/pmd-bluej-1.0-SNAPSHOT.jar PMDExecExt-win.jar
-
-mvn clean
+    mvn package
+    mv target/pmd-bluej-1.0-SNAPSHOT.jar PMDExecExt-win.jar
+    mvn clean
 
 Change the comments in MenuBuilder.java back and save file.
