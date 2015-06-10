@@ -19,8 +19,6 @@
       <artifactId>bluejext</artifactId>
       <type>jar</type>
       <version>3.1.5</version>
-      <systemPath>${HOME}/pmd-bluej/lib/bluejext.jar</systemPath>
-      <scope>system</scope>
     </dependency>
   </dependencies>
   <build>
@@ -40,4 +38,13 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <id>project_lib</id>
+      <name>Repository in project's lib dir</name>
+      <layout>default</layout>
+      <url>file:///${project.basedir}/lib</url>
+      <releases><enabled>true</enabled></releases>
+    </repository>
+  </repositories>
 </project>
