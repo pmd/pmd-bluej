@@ -1,4 +1,4 @@
-package pmdexecext.bluej;
+package net.sourceforge.pmd;
 
 import bluej.extensions.BlueJ;
 import bluej.extensions.Extension;

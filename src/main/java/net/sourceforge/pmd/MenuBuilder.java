@@ -1,5 +1,5 @@
 
-package pmdexecext.bluej;
+package net.sourceforge.pmd;
 
 import bluej.extensions.BClass;
 import bluej.extensions.MenuGenerator;
