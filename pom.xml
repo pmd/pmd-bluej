@@ -6,7 +6,13 @@
   <version>2.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>pmd-bluej</name>
-  <url>http://maven.apache.org</url>
+  <url>http://pmd.sourceforge.net</url>
+  <licenses>
+    <license>
+        <name>BSD-style license</name>
+        <url>http://pmd.sourceforge.net/license.html</url>
+    </license>
+  </licenses>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
