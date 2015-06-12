@@ -6,7 +6,10 @@ package net.sourceforge.pmd;
 import bluej.extensions.BlueJ;
 import bluej.extensions.Extension;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Properties;
 
 public class PMDExecExt extends Extension {
 
@@ -23,11 +26,27 @@ public class PMDExecExt extends Extension {
         return true; 
     }
 
-    public String  getVersion () {
-        return ("1.0");
+    public String getVersion () {
+        String version = "unknown";
+        InputStream stream = null;
+        try {
+            stream = PMDExecExt.class.getResourceAsStream("/META-INF/maven/net.sourceforge.pmd/pmd-bluej/pom.properties");
+            if (stream != null) {
+                Properties properties = new Properties();
+                properties.load(stream);
+                version = properties.getProperty("version");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (stream != null) {
+                try { stream.close(); } catch (IOException e) { /* ignored */ }
+            }
+        }
+        return version;
     }
 
-    public String  getName () {
+    public String getName () {
         return ("PMD");
     }
 
@@ -44,5 +63,3 @@ public class PMDExecExt extends Extension {
         }
     }
 }
-
-
