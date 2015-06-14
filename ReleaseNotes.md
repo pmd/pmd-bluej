@@ -1,5 +1,12 @@
 # pmd-bluej Release Notes
 
+
+## ????? - 2.1.0
+
+* The extension detects the operating system (Windows vs. Linux) and
+  handles both. So, from now on, there is only one jar file.
+
+
 ## 08-June-2015 - 2.0.0
 
 * pmd-bluej extension uses now a PMD installed on the local pc

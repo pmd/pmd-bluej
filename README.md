@@ -7,7 +7,7 @@ BlueJ for Windows use.
 
 In BlueJ, open to the main class window that displays your classes, right-click
 on a class object, when the menu comes up, at the bottom of it you will see
-PMD as an option, select that and click "check code"  A popup will then run
+PMD as an option, select that and click "check code". A popup will then run
 PMD against your class source file and then display a popup listing all of
 the things PMD does not like about your code.
 
@@ -33,8 +33,7 @@ properly.  A typical command invocation under Windows for PMD might be:
 
 You can install PMD from a prebuilt file or download it and build it yourself.
 
-Since this extension is not portable between Linux or Windows there are 2 .jar files
-here, PMDExecExt-win.jar for Windows and PMDExecExt.jar for Linux/Unix.
+This extension works both under Linux and Windows and there is only one jar file (since version 2.1).
 
 To install under Linux, assuming you have installed BlueJ in your home directory
 (the standard location for version 3.1.5 of BlueJ for Linux) copy the
@@ -42,7 +41,7 @@ PMDExecExt.jar file to ~/bluej/lib/extensions directory, then close and open
 BlueJ.
 
 To install under Windows, assuming you have installed BlueJ into the normal location,
-copy the PMDExecExt-Win.jar file to C:\Program Files\BlueJ\lib\extensions.
+copy the PMDExecExt.jar file to C:\Program Files\BlueJ\lib\extensions.
 
 This BlueJ extension also requires a wrapper script to be created.  This script sets the
 rulesets that PMD will run against your code and (optionally) sets the version of PMD
@@ -65,22 +64,10 @@ Please see the PMD documentation for the rulesets available.
 
 ## Building:
 
-### If you want to build it: (under Linux):
+### If you want to build it:
 
 You need to have maven installed.
 
     mvn package
-    mv target/pmd-bluej-1.0-SNAPSHOT.jar PMDExecExt.jar
+    mv target/pmd-bluej-*-SNAPSHOT.jar PMDExecExt.jar
     mvn clean
-
-### To build the Windows version:
-(I know this is a bit of a hack)
-
-Modify MenuBuilder.java to comment the Unixisms and uncomment the Windows
-stuff
-
-    mvn package
-    mv target/pmd-bluej-1.0-SNAPSHOT.jar PMDExecExt-win.jar
-    mvn clean
-
-Change the comments in MenuBuilder.java back and save file.
