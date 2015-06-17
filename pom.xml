@@ -37,7 +37,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>pmdexecext.bluej.PMDExecExt</mainClass>
+              <mainClass>net.sourceforge.pmd.PMDExecExt</mainClass>
             </manifest>
           </archive>
         </configuration>
