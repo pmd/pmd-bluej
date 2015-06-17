@@ -3,34 +3,31 @@
  */
 package net.sourceforge.pmd;
 
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import javax.swing.AbstractAction;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import bluej.extensions.BClass;
 import bluej.extensions.MenuGenerator;
-import bluej.extensions.BlueJ;
-import bluej.extensions.editor.TextLocation;
-import bluej.extensions.ProjectNotOpenException;
 import bluej.extensions.PackageNotFoundException;
-
-import javax.swing.*;
-
-import java.awt.event.ActionEvent;
-import java.awt.Frame;
-import java.io.*;
-import java.util.Iterator;
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.io.File;
-import java.lang.Object;
+import bluej.extensions.ProjectNotOpenException;
 
 public class MenuBuilder extends MenuGenerator {
 
-    private BClass curClass;
     private Frame frame;
     private String javaFileName;
+    private Preferences preferences;
 
-    public MenuBuilder(Frame frame) {
+    public MenuBuilder(Frame frame, Preferences preferences) {
         this.frame = frame;
+        this.preferences = preferences;
     }
 
     public JMenuItem getClassMenuItem(BClass aClass) {
@@ -42,15 +39,6 @@ public class MenuBuilder extends MenuGenerator {
         JMenu jm = new JMenu("PMD");
         jm.add(new JMenuItem(new SimpleAction("Check code")));
         return jm;
-    }
-
-    public void notifyPostClassMenu(BClass bc, JMenuItem jmi) {
-        curClass = bc;
-    }
-    
-    private boolean isWindows() {
-        String osname = System.getProperty("os.name");
-        return osname.toLowerCase(Locale.ROOT).contains("win");
     }
 
     // The nested class that instantiates the different (simple) menus.
@@ -65,11 +53,11 @@ public class MenuBuilder extends MenuGenerator {
         try {
                 JOptionPane.showMessageDialog(frame, "Running PMD on selected Class (Click OK)");
 
-                String mycommand = "pmd.sh " + javaFileName;
+                String mycommand = preferences.getPMDPath() + "/bin/run.sh pmd " + preferences.getPMDOptions() + " -d " + javaFileName;
 
-                if (isWindows()) {
+                if (SystemUtils.isWindows()) {
                     JOptionPane.showMessageDialog(frame, "Any errors will be displayed in command window with line numbers, press key to exit"); 
-                    mycommand = "cmd /c start pmdsh.bat " + javaFileName;
+                    mycommand = "cmd /c start " + preferences.getPMDPath() + "\\bin\\pmd.bat " + preferences.getPMDOptions() + " -d " + javaFileName;
                 }
                 Process p = Runtime.getRuntime().exec(mycommand);
 
@@ -78,8 +66,8 @@ public class MenuBuilder extends MenuGenerator {
 
                 JOptionPane.showMessageDialog(frame, "Class Checked");
 
-                if (!isWindows()) {
-                    StringBuffer msg = new StringBuffer("");
+                if (!SystemUtils.isWindows()) {
+                    StringBuilder msg = new StringBuilder("");
                     msg.append("Any problems found are displayed below:");
                     msg.append(System.getProperty("line.separator"));
                     while ((s = stdInput.readLine()) != null ){ 
