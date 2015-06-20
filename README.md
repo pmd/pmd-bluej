@@ -3,6 +3,11 @@
 This BlueJ extension was developed under Linux for both BlueJ for Linux and
 BlueJ for Windows use.
 
+## Download
+
+*   PMD can be downloaded here: <https://sourceforge.net/projects/pmd/files/pmd/>
+*   The PMD Extension for BlueJ is here: <https://sourceforge.net/projects/pmd/files/pmd-bluej/>
+
 ## Use:
 
 In BlueJ, open to the main class window that displays your classes, right-click
@@ -44,9 +49,14 @@ executed.
 
 Please see the PMD documentation for the rulesets available.
 
-## Building:
+## Contributing
 
-### If you want to build it:
+### Pull requests
+
+Easiest way to contribute is via pull requests on <https://github.com/pmd/pmd-bluej>. Pull Requests are always
+welcome.
+
+### Building
 
 You need to have maven installed.
 
@@ -54,3 +64,19 @@ You need to have maven installed.
 
 Take the generated jar file `target/PMDExecExt.jar` and copy it into
 BlueJ's extension directory.
+
+### Releasing a new version
+
+*   Update [ReleaseNotes.md](https://github.com/pmd/pmd-bluej/blob/master/ReleaseNotes.md)
+    with new version a release date
+*   Update the version: `mvn versions:set -DnewVersion=2.1`
+*   Commit: `git commit -a -m "Prepare new version 2.1"`
+*   Tag: `git tag 2.1`
+*   Push: `git push origin master; git push origin tag 2.1`
+*   Build it: `mvn clean package`
+*   Upload the jar file to: <https://sourceforge.net/projects/pmd/files/pmd-bluej/>. Also upload
+    the ReleaseNotes as `README.md`.
+*   Update [ReleaseNotes.md](https://github.com/pmd/pmd-bluej/blob/master/ReleaseNotes.md)
+    and add a placeholder for the next version
+*   Commit and Push
+*   Post a news on <https://sourceforge.net/p/pmd/news/>.
