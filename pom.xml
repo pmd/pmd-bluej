@@ -27,12 +27,17 @@
       <version>3.1.5</version>
     </dependency>
   </dependencies>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.5</java.version>
+  </properties>
   <build>
+    <finalName>PMDExecExt</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>2.6</version>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>2.6</version>
         <configuration>
           <archive>
             <manifest>
@@ -41,6 +46,20 @@
             </manifest>
           </archive>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.6</version>
       </plugin>
     </plugins>
   </build>
