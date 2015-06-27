@@ -74,20 +74,17 @@ public class MenuBuilder extends MenuGenerator {
                 String mycommand = preferences.getPMDPath() + "/bin/run.sh pmd " + preferences.getPMDOptions() + " -d " + javaFileName;
 
                 if (SystemUtils.isWindows()) {
-                    JOptionPane.showMessageDialog(frame, "Any errors will be displayed in command window with line numbers, press key to exit"); 
-                    mycommand = "cmd /c start " + preferences.getPMDPath() + "\\bin\\pmd.bat " + preferences.getPMDOptions() + " -d " + javaFileName;
+                    mycommand = preferences.getPMDPath() + "\\bin\\pmd.bat " + preferences.getPMDOptions() + " -d " + javaFileName;
                 }
 
                 String output = runPMD(mycommand);
 
                 JOptionPane.showMessageDialog(frame, "Class Checked");
 
-                if (!SystemUtils.isWindows()) {
-                    StringBuilder msg = new StringBuilder("Any problems found are displayed below:");
-                    msg.append(LINE_SEPARATOR);
-                    msg.append(output);
-                    JOptionPane.showMessageDialog(frame, msg);
-                }
+                StringBuilder msg = new StringBuilder("Any problems found are displayed below:");
+                msg.append(LINE_SEPARATOR);
+                msg.append(output);
+                JOptionPane.showMessageDialog(frame, msg);
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(frame, "Couldn't run PMD: " + e.getMessage(), "Exception", JOptionPane.ERROR_MESSAGE);
