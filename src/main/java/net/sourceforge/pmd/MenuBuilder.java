@@ -50,9 +50,16 @@ public class MenuBuilder extends MenuGenerator {
 
         String s;
         public void actionPerformed(ActionEvent anEvent) {
-        try {
-                JOptionPane.showMessageDialog(frame, "Running PMD on selected Class (Click OK)");
+            String pmdPath = preferences.getPMDPath();
+            if (pmdPath == null || pmdPath.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The path to PMD Installation is not configured. "
+                        + "Please select the path under \"Tools / Preferences / Extensions / PMD\".",
+                        "No Path to PMD Installation", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
+            try {
+                JOptionPane.showMessageDialog(frame, "Running PMD on selected Class (Click OK)");
                 String mycommand = preferences.getPMDPath() + "/bin/run.sh pmd " + preferences.getPMDOptions() + " -d " + javaFileName;
 
                 if (SystemUtils.isWindows()) {
