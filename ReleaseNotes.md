@@ -1,7 +1,7 @@
 # pmd-bluej Release Notes
 
 
-## ????? - 2.1.0
+## ????? - 2.1
 
 * The extension detects the operating system (Windows vs. Linux) and
   handles both. So, from now on, there is only one jar file.
@@ -15,10 +15,10 @@
 * Copy the file `PMDExecExt.jar` to BlueJ's extension directory.
 * Make sure, you have the "Path to PMD Installation" configured in BlueJ.
 
-See <https://github.com/pmd/pmd-bluej/blob/master/README.md> for more information.
+See <https://github.com/pmd/pmd-bluej/blob/2.1/README.md> for more information.
 
 
-## 08-June-2015 - 2.0.0
+## 08-June-2015 - 2.0
 
 * pmd-bluej extension uses now a PMD installed on the local pc
 * This allows you to use the latest PMD version (e.g. 5.3.2)
