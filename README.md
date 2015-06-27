@@ -78,5 +78,7 @@ BlueJ's extension directory.
     the ReleaseNotes as `README.md`.
 *   Update [ReleaseNotes.md](https://github.com/pmd/pmd-bluej/blob/master/ReleaseNotes.md)
     and add a placeholder for the next version
-*   Commit and Push
+*   Update the version: `mvn versions:set -DnewVersion=2.2-SNAPSHOT`
+*   Commit: `git commit -a -m "Prepare next development version 2.2-SNAPSHOT"`
+*   Push: `git push origin master`
 *   Post a news on <https://sourceforge.net/p/pmd/news/>.
