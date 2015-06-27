@@ -32,25 +32,35 @@ public class MenuBuilder extends MenuGenerator {
         this.preferences = preferences;
     }
 
+    @Override
     public JMenuItem getClassMenuItem(BClass aClass) {
-    try {
-          javaFileName = aClass.getJavaFile().getPath(); 
-           } catch (ProjectNotOpenException pnoe) {
-           } catch (PackageNotFoundException pnfe) {
-        }
         JMenu jm = new JMenu("PMD");
-        jm.add(new JMenuItem(new SimpleAction("Check code")));
+        jm.add(new JMenuItem(new PMDAction("Check code")));
         return jm;
     }
 
-    // The nested class that instantiates the different (simple) menus.
-    class SimpleAction extends AbstractAction {
+    @Override
+    public void notifyPostClassMenu(BClass bc, JMenuItem jmi) {
+        try {
+            javaFileName = bc.getJavaFile().getPath();
+        } catch (ProjectNotOpenException e) {
+            e.printStackTrace();
+        } catch (PackageNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-        public SimpleAction(String menuName) {
+    class PMDAction extends AbstractAction {
+        public PMDAction(String menuName) {
             putValue(AbstractAction.NAME, menuName);
         }
 
         public void actionPerformed(ActionEvent anEvent) {
+            if (javaFileName == null || javaFileName.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "No file selected", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             String pmdPath = preferences.getPMDPath();
             if (pmdPath == null || pmdPath.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "The path to PMD Installation is not configured. "
