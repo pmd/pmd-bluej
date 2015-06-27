@@ -21,6 +21,8 @@ import bluej.extensions.ProjectNotOpenException;
 
 public class MenuBuilder extends MenuGenerator {
 
+    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+
     private Frame frame;
     private String javaFileName;
     private Preferences preferences;
@@ -48,7 +50,6 @@ public class MenuBuilder extends MenuGenerator {
             putValue(AbstractAction.NAME, menuName);
         }
 
-        String s;
         public void actionPerformed(ActionEvent anEvent) {
             String pmdPath = preferences.getPMDPath();
             if (pmdPath == null || pmdPath.trim().isEmpty()) {
@@ -66,28 +67,54 @@ public class MenuBuilder extends MenuGenerator {
                     JOptionPane.showMessageDialog(frame, "Any errors will be displayed in command window with line numbers, press key to exit"); 
                     mycommand = "cmd /c start " + preferences.getPMDPath() + "\\bin\\pmd.bat " + preferences.getPMDOptions() + " -d " + javaFileName;
                 }
-                Process p = Runtime.getRuntime().exec(mycommand);
 
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                String output = runPMD(mycommand);
 
                 JOptionPane.showMessageDialog(frame, "Class Checked");
 
                 if (!SystemUtils.isWindows()) {
-                    StringBuilder msg = new StringBuilder("");
-                    msg.append("Any problems found are displayed below:");
-                    msg.append(System.getProperty("line.separator"));
-                    while ((s = stdInput.readLine()) != null ){ 
-                           msg.append(s);
-                           msg.append(System.getProperty("line.separator"));
-                          }
+                    StringBuilder msg = new StringBuilder("Any problems found are displayed below:");
+                    msg.append(LINE_SEPARATOR);
+                    msg.append(output);
                     JOptionPane.showMessageDialog(frame, msg);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(frame, "Couldn't run PMD: " + e.getMessage());
+                JOptionPane.showMessageDialog(frame, "Couldn't run PMD: " + e.getMessage(), "Exception", JOptionPane.ERROR_MESSAGE);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(frame, "Couldn't run PMD: " + e.getMessage(), "Exception", JOptionPane.ERROR_MESSAGE);
             }
             JOptionPane.showMessageDialog(frame, "PMD run completed");
+        }
+
+        private String runPMD(String mycommand) throws IOException, InterruptedException {
+            ProcessBuilder pb = new ProcessBuilder(mycommand.split(" +"));
+            pb.redirectErrorStream(true);
+            final Process p = pb.start();
+
+            final StringBuilder output = new StringBuilder();
+            Thread reader = new Thread(new Runnable() {
+                public void run() {
+                    BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    String s;
+                    try {
+                        while ((s = stdInput.readLine()) != null ){ 
+                            output.append(s);
+                            output.append(LINE_SEPARATOR);
+                        }
+                    } catch (IOException e) {
+                        output.append(e.toString());
+                        e.printStackTrace();
+                    } finally {
+                        try { stdInput.close(); } catch (IOException e) { /* quiet */ }
+                    }
+                }
+            });
+            reader.setDaemon(true);
+            reader.start();
+            p.waitFor();
+            return output.toString();
         }
     }
 }
