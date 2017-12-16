@@ -53,7 +53,7 @@ public class PMDExecExt extends Extension {
 
     public URL getURL () {
         try {
-            return new URL("http://pmd.sf.net/");
+            return new URL("https://pmd.github.io/");
         } catch ( Exception e ) {
             System.out.println ("Can't get PMD extension URL: "+e.getMessage());
             return null;

@@ -2,6 +2,10 @@
 
 ## ????? - 2.2
 
+*   Fixed [#1: no PMD item in context menu on BlueJ 4.0.1 on a Mac](https://github.com/pmd/pmd-bluej/issues/1)
+*   Fixed [#2: BlueJ Won't Start](https://github.com/pmd/pmd-bluej/issues/2)
+*   Updated minimum required Java Version to **Java 1.7**.
+*   The bluej extension now works with BlueJ 4.1.2
 
 ## 27-June-2015 - 2.1
 
