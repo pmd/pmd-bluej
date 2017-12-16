@@ -1,6 +1,6 @@
 # pmd-bluej Release Notes
 
-## ????? - 2.2
+## ????? - 2.2.0
 
 *   Fixed [#1: no PMD item in context menu on BlueJ 4.0.1 on a Mac](https://github.com/pmd/pmd-bluej/issues/1)
 *   Fixed [#2: BlueJ Won't Start](https://github.com/pmd/pmd-bluej/issues/2)

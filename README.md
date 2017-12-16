@@ -62,7 +62,7 @@ welcome.
 
 You need to have maven installed.
 
-    mvn clean package
+    ./mvnw clean verify
 
 Take the generated jar file `target/PMDExecExt.jar` and copy it into
 BlueJ's extension directory.
@@ -71,16 +71,17 @@ BlueJ's extension directory.
 
 *   Update [ReleaseNotes.md](https://github.com/pmd/pmd-bluej/blob/master/ReleaseNotes.md)
     with new version a release date
-*   Update the version: `mvn versions:set -DnewVersion=2.1`
-*   Commit: `git commit -a -m "Prepare new version 2.1"`
-*   Tag: `git tag 2.1`
-*   Push: `git push origin master; git push origin tag 2.1`
-*   Build it: `mvn clean package`
+*   Update the version: `./mvnw versions:set -DnewVersion=2.2.0`
+*   Commit: `git commit -a -m "Prepare new version 2.2.0"`
+*   Tag: `git tag 2.2.0`
+*   Push: `git push origin master; git push origin tag 2.2.0`
+*   Build it: `./mvnw clean verify`
 *   Upload the jar file to: <https://sourceforge.net/projects/pmd/files/pmd-bluej/>. Also upload
     the ReleaseNotes as `README.md`.
+*   Upload the jar file and Release Notes to: <https://github.com/pmd/pmd-bluej/releases>
 *   Update [ReleaseNotes.md](https://github.com/pmd/pmd-bluej/blob/master/ReleaseNotes.md)
     and add a placeholder for the next version
-*   Update the version: `mvn versions:set -DnewVersion=2.2-SNAPSHOT`
-*   Commit: `git commit -a -m "Prepare next development version 2.2-SNAPSHOT"`
+*   Update the version: `./mvnw versions:set -DnewVersion=2.3.0-SNAPSHOT`
+*   Commit: `git commit -a -m "Prepare next development version 2.3.0-SNAPSHOT"`
 *   Push: `git push origin master`
 *   Post a news on <https://sourceforge.net/p/pmd/news/>.
