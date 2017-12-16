@@ -3,6 +3,8 @@
 This BlueJ extension was developed under Linux for both BlueJ for Linux and
 BlueJ for Windows use.
 
+You can get BlueJ from <https://www.bluej.org/>.
+
 ## Download
 
 *   PMD can be downloaded here: <https://sourceforge.net/projects/pmd/files/pmd/>

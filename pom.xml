@@ -21,10 +21,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>bluejext</groupId>
+      <groupId>bluej</groupId>
       <artifactId>bluejext</artifactId>
       <type>jar</type>
-      <version>3.1.5</version>
+      <version>4.1.2</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <properties>
