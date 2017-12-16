@@ -14,10 +14,9 @@ import java.util.Properties;
 public class PMDExecExt extends Extension {
 
     public void startup (BlueJ bluej) {
-
         Preferences pmdPreferences = new Preferences(bluej);
         bluej.setPreferenceGenerator(pmdPreferences);
-        bluej.setMenuGenerator(new MenuBuilder(bluej.getCurrentFrame(), pmdPreferences));
+        bluej.setMenuGenerator(new MenuBuilder(pmdPreferences));
     }
 
     public boolean isCompatible () {
