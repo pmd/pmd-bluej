@@ -27,7 +27,7 @@ public class Preferences implements PreferenceGenerator {
     private BlueJ bluej;
     public static final String PROPERTY_PMD_PATH = "PMD.Path";
     public static final String PROPERTY_PMD_OPTIONS = "PMD.Options";
-    private static final String PMD_OPTIONS_DEFAULT = "-format text -R java-basic,java-design -version 1.7 -language java";
+    private static final String PMD_OPTIONS_DEFAULT = "-format text -R java-basic,java-design -language java";
 
     public Preferences(BlueJ bluej) {
         this.bluej = bluej;
