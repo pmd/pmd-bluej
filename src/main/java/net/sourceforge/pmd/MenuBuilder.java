@@ -3,24 +3,25 @@
  */
 package net.sourceforge.pmd;
 
-import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import javax.swing.AbstractAction;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-
-import bluej.extensions.BClass;
-import bluej.extensions.MenuGenerator;
-import bluej.extensions.PackageNotFoundException;
-import bluej.extensions.ProjectNotOpenException;
+import bluej.extensions2.BClass;
+import bluej.extensions2.MenuGenerator;
+import bluej.extensions2.PackageNotFoundException;
+import bluej.extensions2.ProjectNotOpenException;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 
 public class MenuBuilder extends MenuGenerator {
-
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     private Preferences preferences;
 
@@ -29,15 +30,13 @@ public class MenuBuilder extends MenuGenerator {
     }
 
     @Override
-    public JMenuItem getClassMenuItem(BClass aClass) {
-        JMenu jm = new JMenu("PMD");
-        jm.add(new JMenuItem(new PMDAction("Check code", aClass)));
-        return jm;
+    public MenuItem getClassMenuItem(BClass aClass) {
+        MenuItem menuItem = new MenuItem("PMD: Check code");
+        menuItem.setOnAction(new PMDAction(aClass));
+        return menuItem;
     }
 
-    class PMDAction extends AbstractAction {
-        private static final long serialVersionUID = 6914224494890842379L;
-
+    class PMDAction implements EventHandler<ActionEvent> {
         private String javaFileName;
 
         private void determineJavaFileName(BClass aClass) {
@@ -50,27 +49,28 @@ public class MenuBuilder extends MenuGenerator {
             }
         }
 
-        public PMDAction(String menuName, BClass aClass) {
+        public PMDAction(BClass aClass) {
             determineJavaFileName(aClass);
-            putValue(AbstractAction.NAME, menuName);
         }
 
-        public void actionPerformed(ActionEvent anEvent) {
+        @Override
+        public void handle(ActionEvent event) {
             if (javaFileName == null || javaFileName.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No file selected", "Error", JOptionPane.ERROR_MESSAGE);
+                Alert alert = new Alert(AlertType.ERROR, "No file selected");
+                alert.showAndWait();
                 return;
             }
 
             String pmdPath = preferences.getPMDPath();
             if (pmdPath == null || pmdPath.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "The path to PMD Installation is not configured. "
-                        + "Please select the path under \"Tools / Preferences / Extensions / PMD\".",
-                        "No Path to PMD Installation", JOptionPane.ERROR_MESSAGE);
+                Alert alert = new Alert(AlertType.ERROR, "No Path to PMD Installation: "
+                        + "The path to PMD Installation is not configured. "
+                        + "Please select the path under \"Tools / Preferences / Extensions / PMD\".");
+                alert.showAndWait();
                 return;
             }
 
             try {
-                JOptionPane.showMessageDialog(null, "Running PMD on selected Class (Click OK)");
                 String mycommand = preferences.getPMDPath() + "/bin/run.sh pmd " + preferences.getPMDOptions() + " -d " + javaFileName;
 
                 if (SystemUtils.isWindows()) {
@@ -79,20 +79,32 @@ public class MenuBuilder extends MenuGenerator {
 
                 String output = runPMD(mycommand);
 
-                JOptionPane.showMessageDialog(null, "Class Checked");
-
-                StringBuilder msg = new StringBuilder("Any problems found are displayed below:");
-                msg.append(LINE_SEPARATOR);
+                StringBuilder msg = new StringBuilder(1000);
+                msg.append("PMD run finished.").append(System.lineSeparator()).append(System.lineSeparator());
+                msg.append("Any problems found are displayed below:").append(System.lineSeparator());
                 msg.append(output);
-                JOptionPane.showMessageDialog(null, msg);
+
+                showResults(msg);
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Couldn't run PMD: " + e.getMessage(), "Exception", JOptionPane.ERROR_MESSAGE);
+                Alert alert = new Alert(AlertType.ERROR, "Couldn't run PMD: " + e.toString());
+                alert.showAndWait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Couldn't run PMD: " + e.getMessage(), "Exception", JOptionPane.ERROR_MESSAGE);
+                Thread.currentThread().interrupt();
+                return;
             }
-            JOptionPane.showMessageDialog(null, "PMD run completed");
+        }
+
+        private void showResults(StringBuilder msg) {
+            Dialog<ButtonType> resultDialog = new Dialog<>();
+            BorderPane dialogContent = new BorderPane();
+            TextArea textArea = new TextArea(msg.toString());
+            textArea.setEditable(false);
+            dialogContent.setCenter(textArea);
+            resultDialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+            resultDialog.getDialogPane().setContent(dialogContent);
+            resultDialog.setTitle("PMD Results");
+            resultDialog.showAndWait();
         }
 
         private String runPMD(String mycommand) throws IOException, InterruptedException {
@@ -108,7 +120,7 @@ public class MenuBuilder extends MenuGenerator {
                     try {
                         while ((s = stdInput.readLine()) != null ){ 
                             output.append(s);
-                            output.append(LINE_SEPARATOR);
+                            output.append(System.lineSeparator());
                         }
                     } catch (IOException e) {
                         output.append(e.toString());

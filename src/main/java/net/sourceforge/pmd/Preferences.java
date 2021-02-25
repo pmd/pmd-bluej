@@ -3,27 +3,27 @@
  */
 package net.sourceforge.pmd;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import bluej.extensions.BlueJ;
-import bluej.extensions.PreferenceGenerator;
+import bluej.extensions2.BlueJ;
+import bluej.extensions2.PreferenceGenerator;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.stage.DirectoryChooser;
 
 public class Preferences implements PreferenceGenerator {
 
-    private JPanel panel;
-    private JTextField pmdPath;
-    private JTextField pmdOptions;
+    private GridPane pane;
+    private TextField pmdPath;
+    private TextField pmdOptions;
+
     private BlueJ bluej;
     public static final String PROPERTY_PMD_PATH = "PMD.Path";
     public static final String PROPERTY_PMD_OPTIONS = "PMD.Options";
@@ -31,78 +31,52 @@ public class Preferences implements PreferenceGenerator {
 
     public Preferences(BlueJ bluej) {
         this.bluej = bluej;
-        renderPanel();
+        renderPane();
         loadValues(); // Load the default/initial values
     }
 
-    private void renderPanel() {
-        panel = new JPanel();
-        pmdPath = new JTextField();
-        pmdOptions = new JTextField();
+    private void renderPane() {
+        pane = new GridPane();
 
-        panel.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        ColumnConstraints column1 = new ColumnConstraints();
+        ColumnConstraints column2 = new ColumnConstraints(100,100,Double.MAX_VALUE);
+        column2.setHgrow(Priority.ALWAYS); // second column gets any extra width
+        ColumnConstraints column3 = new ColumnConstraints();
+        pane.getColumnConstraints().addAll(column1, column2, column3);
 
-        c.gridwidth = 1;
-        c.anchor = GridBagConstraints.EAST;
-        c.weightx = 0.0;
-        c.fill = GridBagConstraints.NONE;
-        panel.add(new JLabel("Path to PMD installation:"), c);
+        pmdPath = new TextField();
+        pmdOptions = new TextField();
+        Button selectPmdPathButton = new Button("Select");
+        Button resetToDefaultButton = new Button("Reset to default");
 
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 1.0;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(pmdPath,c );
+        pane.add(new Label("Path to PMD installation:"), 0, 0);
+        pane.add(pmdPath, 1, 0);
+        pane.add(selectPmdPathButton, 2, 0);
 
-        JButton selectPmdPathButton = new JButton("Select");
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        c.anchor = GridBagConstraints.WEST;
-        c.weightx = 0.0;
-        c.fill = GridBagConstraints.NONE;
-        panel.add(selectPmdPathButton, c);
+        pane.add(new Label("PMD Options:"), 0, 1);
+        pane.add(pmdOptions, 1, 1);
+        pane.add(resetToDefaultButton, 2, 1);
 
-        c.gridwidth = 1;
-        c.anchor = GridBagConstraints.EAST;
-        c.weightx = 0.0;
-        c.fill = GridBagConstraints.NONE;
-        panel.add(new JLabel("PMD Options:"), c);
-
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 1.0;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(pmdOptions, c);
-
-        JButton resetToDefaultButton = new JButton("Reset to default");
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        c.anchor = GridBagConstraints.WEST;
-        c.weightx = 0.0;
-        c.fill = GridBagConstraints.NONE;
-        panel.add(resetToDefaultButton, c);
-
-        selectPmdPathButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fileChooser.setCurrentDirectory(new File(pmdPath.getText()));
-                int result = fileChooser.showDialog(panel, "Select");
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    boolean valid = verifyPMDPath(selectedFile);
-                    if (valid) {
-                        pmdPath.setText(selectedFile.getAbsolutePath());
-                    } else {
-                        JOptionPane.showMessageDialog(panel, "The selected path " + selectedFile + " doesn't seem to be"
-                                + " a PMD installation. E.g. the file bin/pmd.bat or bin/run.sh is missing.");
-                    }
+        selectPmdPathButton.setOnAction(e -> {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            File currentDir = new File(pmdPath.getText());
+            if (currentDir.exists()) {
+                directoryChooser.setInitialDirectory(currentDir);
+            }
+            File selectedDirectory = directoryChooser.showDialog(pane.getScene().getWindow());
+            if (selectedDirectory != null) {
+                boolean valid = verifyPMDPath(selectedDirectory);
+                if (valid) {
+                    pmdPath.setText(selectedDirectory.getAbsolutePath());
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR, "The selected path " + selectedDirectory + " doesn't seem to be"
+                            + " a PMD installation. E.g. the file bin/pmd.bat or bin/run.sh is missing.");
+                    alert.showAndWait();
                 }
             }
         });
 
-        resetToDefaultButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                pmdOptions.setText(PMD_OPTIONS_DEFAULT);
-            }
-        });
+        resetToDefaultButton.setOnAction(e -> pmdOptions.setText(PMD_OPTIONS_DEFAULT));
     }
 
     private boolean verifyPMDPath(File selectedFile) {
@@ -115,7 +89,10 @@ public class Preferences implements PreferenceGenerator {
         return pathToExecutable.exists();
     }
 
-    public JPanel getPanel ()  { return panel; }
+    @Override
+    public Pane getWindow() {
+        return pane;
+    }
 
     public void saveValues () {
         bluej.setExtensionPropertyString(PROPERTY_PMD_PATH, pmdPath.getText());
