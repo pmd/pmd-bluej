@@ -1,6 +1,6 @@
 # pmd-bluej Release Notes
 
-## ????? - 5.0.0
+## 25-February-2021 - 5.0.0
 
 *   Updated minimum required Java Version to **Java 11**.
 *   The bluej extension now works with BlueJ 5.0.0
