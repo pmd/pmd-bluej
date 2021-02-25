@@ -29,21 +29,21 @@ so you must install PMD under your operating system of choice.
 First step is to install PMD.
 You can install PMD from a prebuilt file or download it and build it yourself.
 Remember the path under where you have extracted
-the zip file, e.g. under Linux you could install it under `~/pmd-bin-5.3.2/`.
+the zip file, e.g. under Linux you could install it under `~/pmd-bin-6.31.0/`.
 Under Windows it is usually most convenient to install PMD in the root so as to
 avoid spaces in directory names, (ie: Program Files) or PMD might not execute
-properly; the installation path could be `c:\pmd-bin-5.3.2\`.
+properly; the installation path could be `c:\pmd-bin-6.31.0\`.
 
 Second step is to install the PMD Extension for BlueJ.
 This extension works both under Linux and Windows and there is only one jar file (since version 2.1).
 
 To install under Linux, assuming you have installed BlueJ in your home directory
-(the standard location for version 3.1.5 of BlueJ for Linux) copy the
-`PMDExecExt.jar` file to `~/bluej/lib/extensions` directory, then close and open
+(the standard location for version 5.0.0 of BlueJ for Linux) copy the
+`PMDExecExt.jar` file to `~/bluej/lib/extensions2` directory, then close and open
 BlueJ.
 
 To install under Windows, assuming you have installed BlueJ into the normal location,
-copy the `PMDExecExt.jar` file to C:\Program Files\BlueJ\lib\extensions.
+copy the `PMDExecExt.jar` file to C:\Program Files\BlueJ\lib\extensions2.
 
 The third and last step is, to configure the BlueJ extension. In BlueJ, go to
 "Tools / Preferences / Extensions". Select or enter the "Path to PMD installation"
@@ -67,7 +67,7 @@ You need to have maven installed.
     ./mvnw clean verify
 
 Take the generated jar file `target/PMDExecExt.jar` and copy it into
-BlueJ's extension directory.
+BlueJ's extension2 directory.
 
 ### Releasing a new version
 

@@ -3,8 +3,8 @@
  */
 package net.sourceforge.pmd;
 
-import bluej.extensions.BlueJ;
-import bluej.extensions.Extension;
+import bluej.extensions2.BlueJ;
+import bluej.extensions2.Extension;
 
 import java.io.IOException;
 import java.io.InputStream;
