@@ -2,6 +2,9 @@
 
 ## ????? - 2.3.0
 
+*   Updated minimum required Java Version to **Java 11**.
+*   The bluej extension now works with BlueJ 5.0.0
+*   Fixed [#4: Support BlueJ 5](https://github.com/pmd/pmd-bluej/issues/4)
 
 ## 16-December-2017 - 2.2.0
 
