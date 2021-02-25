@@ -1,5 +1,7 @@
 # pmd-bluej
 
+[![Build Status](https://github.com/pmd/pmd-bluej/workflows/Build/badge.svg)](https://github.com/pmd/pmd-bluej/actions)
+
 This BlueJ extension was developed under Linux for both BlueJ for Linux and
 BlueJ for Windows use.
 
