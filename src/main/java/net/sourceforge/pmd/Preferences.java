@@ -4,6 +4,8 @@
 package net.sourceforge.pmd;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import bluej.extensions2.BlueJ;
 import bluej.extensions2.PreferenceGenerator;
@@ -27,7 +29,7 @@ public class Preferences implements PreferenceGenerator {
     private BlueJ bluej;
     public static final String PROPERTY_PMD_PATH = "PMD.Path";
     public static final String PROPERTY_PMD_OPTIONS = "PMD.Options";
-    private static final String PMD_OPTIONS_DEFAULT = "-format text -R java-basic,java-design -language java";
+    private static final String PMD_OPTIONS_DEFAULT = "-f text -R rulesets/java/quickstart.xml";
 
     public Preferences(BlueJ bluej) {
         this.bluej = bluej;
@@ -70,7 +72,7 @@ public class Preferences implements PreferenceGenerator {
                     pmdPath.setText(selectedDirectory.getAbsolutePath());
                 } else {
                     Alert alert = new Alert(AlertType.ERROR, "The selected path " + selectedDirectory + " doesn't seem to be"
-                            + " a PMD installation. E.g. the file bin/pmd.bat or bin/run.sh is missing.");
+                            + " a PMD installation. E.g. the file bin/pmd.bat or bin/pmd (or bin/run.sh) is missing.");
                     alert.showAndWait();
                 }
             }
@@ -80,13 +82,15 @@ public class Preferences implements PreferenceGenerator {
     }
 
     private boolean verifyPMDPath(File selectedFile) {
-        File pathToExecutable;
+        List<File> executables = new ArrayList<>();
+
         if (SystemUtils.isWindows()) {
-            pathToExecutable = new File(selectedFile, "bin/pmd.bat");
+            executables.add(new File(selectedFile, "bin/pmd.bat"));
         } else {
-            pathToExecutable = new File(selectedFile, "bin/run.sh");
+            executables.add(new File(selectedFile, "bin/run.sh")); // PMD 5, PMD 6
+            executables.add(new File(selectedFile, "bin/pmd")); // PMD 7
         }
-        return pathToExecutable.exists();
+        return executables.stream().anyMatch(File::exists);
     }
 
     @Override

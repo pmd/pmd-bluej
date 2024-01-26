@@ -3,9 +3,11 @@
  */
 package net.sourceforge.pmd;
 
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
 
 import bluej.extensions2.BClass;
 import bluej.extensions2.MenuGenerator;
@@ -15,11 +17,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 
 public class MenuBuilder extends MenuGenerator {
 
@@ -71,13 +73,8 @@ public class MenuBuilder extends MenuGenerator {
             }
 
             try {
-                String mycommand = preferences.getPMDPath() + "/bin/run.sh pmd " + preferences.getPMDOptions() + " -d " + javaFileName;
-
-                if (SystemUtils.isWindows()) {
-                    mycommand = preferences.getPMDPath() + "\\bin\\pmd.bat " + preferences.getPMDOptions() + " -d " + javaFileName;
-                }
-
-                String output = runPMD(mycommand);
+                String command = determinePmdCommandLine();
+                String output = runPMD(command);
 
                 StringBuilder msg = new StringBuilder(1000);
                 msg.append("PMD run finished.").append(System.lineSeparator()).append(System.lineSeparator());
@@ -91,8 +88,32 @@ public class MenuBuilder extends MenuGenerator {
                 alert.showAndWait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                return;
             }
+        }
+
+        private String determinePmdCommandLine() {
+            boolean isPMD7 = new File(preferences.getPMDPath(), "bin/pmd").exists();
+
+            String mycommand = preferences.getPMDPath();
+
+            if (SystemUtils.isWindows()) {
+                if (isPMD7) {
+                    mycommand += "\\bin\\pmd.bat check";
+                } else {
+                    mycommand += "\\bin\\pmd.bat";
+                }
+            } else {
+                // linux/macos
+                if (isPMD7) {
+                    mycommand += "/bin/pmd check";
+                } else {
+                    mycommand += "/bin/run.sh pmd";
+                }
+            }
+
+            // always add the options/flags
+            mycommand += " " + preferences.getPMDOptions() + " -d " + javaFileName;
+            return mycommand;
         }
 
         private void showResults(StringBuilder msg) {
@@ -112,28 +133,35 @@ public class MenuBuilder extends MenuGenerator {
             pb.redirectErrorStream(false);
             final Process p = pb.start();
 
-            final StringBuilder output = new StringBuilder();
-            Thread reader = new Thread(new Runnable() {
-                public void run() {
-                    BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                    String s;
-                    try {
-                        while ((s = stdInput.readLine()) != null ){ 
-                            output.append(s);
-                            output.append(System.lineSeparator());
-                        }
+            StringWriter stdout = new StringWriter();
+            new Thread(() -> {
+                    try (Reader reader = new InputStreamReader(p.getInputStream())) {
+                        reader.transferTo(stdout);
                     } catch (IOException e) {
-                        output.append(e.toString());
-                        e.printStackTrace();
-                    } finally {
-                        try { stdInput.close(); } catch (IOException e) { /* quiet */ }
+                        throw new RuntimeException(e);
                     }
+            }).start();
+            StringWriter stderr = new StringWriter();
+            new Thread(() -> {
+                try (Reader reader = new InputStreamReader(p.getErrorStream())) {
+                    reader.transferTo(stderr);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            });
-            reader.setDaemon(true);
-            reader.start();
-            p.waitFor();
-            return output.toString();
+
+            }).start();
+
+            int exitCode = p.waitFor();
+
+            if (exitCode == 1 || exitCode == 2) {
+                return "Executed command: " + pb.command() + System.lineSeparator()
+                    + "PMD Exited with: " + exitCode + System.lineSeparator() + stderr;
+            }
+            if (exitCode == 0) {
+                return "No problems found";
+            }
+
+            return stdout.toString();
         }
     }
 }
