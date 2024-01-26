@@ -1,6 +1,6 @@
 # pmd-bluej Release Notes
 
-## ??-?????-?? - 5.0.1
+## 26-January-2024 - 5.0.1
 
 *   Support PMD 7 (in addition to PMD 6)
 *   Changed default PMD options to `-f text -R rulesets/java/quickstart.xml`. Note: You might need to adjust this,
