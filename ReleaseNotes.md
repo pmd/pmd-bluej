@@ -1,5 +1,7 @@
 # pmd-bluej Release Notes
 
+## ??-????-???? - 5.0.2
+
 ## 26-January-2024 - 5.0.1
 
 *   Support PMD 7 (in addition to PMD 6)
