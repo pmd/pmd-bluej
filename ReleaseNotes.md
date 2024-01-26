@@ -1,7 +1,11 @@
 # pmd-bluej Release Notes
 
-## ??-?????-?? - 5.1.0
+## ??-?????-?? - 5.0.1
 
+*   Support PMD 7 (in addition to PMD 6)
+*   Changed default PMD options to `-f text -R rulesets/java/quickstart.xml`. Note: You might need to adjust this,
+    if migrating from PMD 6 to PMD 7. The new default options work with both versions.
+*   Fixed [#7: PMD distribution changed the name of the entry point script from run.sh to pmd](https://github.com/pmd/pmd-bluej/issues/7)
 
 ## 25-February-2021 - 5.0.0
 
