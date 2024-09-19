@@ -71,19 +71,19 @@ BlueJ's extension2 directory.
 
 ### Releasing a new version
 
-*   Update [ReleaseNotes.md](https://github.com/pmd/pmd-bluej/blob/master/ReleaseNotes.md)
+*   Update [ReleaseNotes.md](https://github.com/pmd/pmd-bluej/blob/main/ReleaseNotes.md)
     with new version a release date
 *   Update the version: `./mvnw versions:set -DnewVersion=2.2.0`
 *   Commit: `git commit -a -m "Prepare new version 2.2.0"`
 *   Tag: `git tag 2.2.0`
-*   Push: `git push origin master; git push origin tag 2.2.0`
+*   Push: `git push origin main; git push origin tag 2.2.0`
 *   The tag will be built by [Github Actions](https://github.com/pmd/pmd-bluej/actions?query=workflow%3Abuild).
 *   After it is done, a new release including the jar file should be available here:
     *   <https://github.com/pmd/pmd-bluej/releases>
     *   <https://sourceforge.net/projects/pmd/files/pmd-bluej/>
 *   Update the version: `./mvnw versions:set -DnewVersion=2.3.0-SNAPSHOT`
-*   Update [ReleaseNotes.md](https://github.com/pmd/pmd-bluej/blob/master/ReleaseNotes.md)
+*   Update [ReleaseNotes.md](https://github.com/pmd/pmd-bluej/blob/main/ReleaseNotes.md)
     and add a placeholder for the next version
 *   Commit: `git commit -a -m "Prepare next development version 2.3.0-SNAPSHOT"`
-*   Push: `git push origin master`
+*   Push: `git push origin main`
 *   Post a news on <https://sourceforge.net/p/pmd/news/>.
